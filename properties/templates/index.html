@@ -1,16 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Properties</title>
-</head>
-<body>
-    
-    <ul>
-        {% for loc in locations %}
-            <li>{{ loc.name }}, {{ loc.city }}, {{ loc.country }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends "master.html" %}
+
+{% block content %}
+<!-- Search box -->
+<div class="container">
+    <h1>VACATION RENTALS</h1>
+    <div class="search-container">
+        <form method="get" action="{% url 'properties:properties_result' %}">
+            <input type="text" id="location-input" name="location" placeholder="Search for a location..."
+                autocomplete="off">
+            <ul class="suggestions" id="suggestions-list"></ul>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Script for calling auto complete api -->
+<script>
+    const input = document.getElementById("location-input");
+    const suggestionsList = document.getElementById("suggestions-list");
+    let debounceTimer;
+
+    input.addEventListener("input", function () {
+        const query = this.value.trim();
+        if (query.length < 3) {
+            suggestionsList.style.display = "none";
+            return;
+        }
+
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            fetch(`/locations?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionsList.innerHTML = "";
+                    if (data.length === 0) {
+                        suggestionsList.style.display = "none";
+                        return;
+                    }
+
+                    data.forEach(loc => {
+                        const li = document.createElement("li");
+                        li.textContent = `${loc.name}, ${loc.city}, ${loc.country}`;
+                        li.addEventListener("click", () => {
+                            input.value = li.textContent;
+                            suggestionsList.style.display = "none";
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                    suggestionsList.style.display = "block";
+                });
+        }, 300);
+    });
+
+    // Hide suggestions if clicked outside
+    document.addEventListener("click", function (e) {
+        if (!e.target.closest(".search-container")) {
+            suggestionsList.style.display = "none";
+        }
+    });
+</script>
+{% endblock %}

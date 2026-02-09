@@ -1,13 +1,12 @@
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
+from django.http import JsonResponse
 from django.db.models import Q
-from django.template import loader
 from .models import Location
 
+# Home page render
 def index(request):
-    template = loader.get_template("index.html")
-    locations = Location.objects.all().values()
-    context = {"locations": locations}
-    return HttpResponse(template.render(context, request))
+    return render(request, "index.html")
+
 
 # Location auto complete whene type
 def location_autocomplete(request):
@@ -20,5 +19,11 @@ def location_autocomplete(request):
         Q(name__icontains=q) | Q(city__icontains=q) | Q(country__icontains=q)
     )[:5].values("id", "name", "city", "country")
     
-    
     return JsonResponse(list(locations), safe=False)
+
+
+# Properties result
+def properties_result(request):
+    q = request.GET.get("location", "")
+
+    return render(request, "properties.html", {"q": q})

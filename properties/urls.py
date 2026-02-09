@@ -3,9 +3,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
+app_name = "properties"
 urlpatterns = [
     path("", views.index, name="index"),
-    path('locations/', views.location_autocomplete, name='location_autocomplete'),
+    path("locations/", views.location_autocomplete, name="location_autocomplete"),
+    path("properties/", views.properties_result, name="properties_result")
 ]
 
 if settings.DEBUG:
