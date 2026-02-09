@@ -4,7 +4,8 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path("", views.index, name="index")
+    path("", views.index, name="index"),
+    path('locations/', views.location_autocomplete, name='location_autocomplete'),
 ]
 
 if settings.DEBUG:
