@@ -3,7 +3,13 @@
 
 {% block content %}
 <div class="properties-wrapper">
-    <h2 class="page-title">{{ location }} Vacation Rentals</h2>
+    <div style="display: flex; justify-content: space-between; gap: 50px">
+        <h2 class="page-title">{{ location }} Vacation Rentals</h2>
+        <!-- Back Button -->
+        <div class="back-container">
+            <a href="{% url 'properties:index' %}" class="back-btn">Back to Home</a>
+        </div>
+    </div>
 
     <div class="properties-grid">
         {% for prop in properties %}
@@ -29,7 +35,7 @@
 
                 <div class="facilities">
                     {% for fac in prop.facilities|split:"," %}
-                    <span class="facility-item">{{ fac }}{% if not forloop.last %}{{ "  " }}&middot;{% endif %}</span>
+                    <span class="facility-item">{{ fac }}{% if not forloop.last %}{{ " " }}&middot;{% endif %}</span>
                     {% endfor %}
                 </div>
 
