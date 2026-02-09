@@ -18,7 +18,7 @@
             <!-- Image section -->
             <div class="image-wrapper">
                 {% if prop.image %}
-                <img src="/media/images/{{ prop.image }}" alt="{{ prop.title }}">
+                <img src="/media/{{ prop.image }}" alt="{{ prop.title }}">
                 {% else %}
                 <img src="/media/image.jpg" alt="Default Image">
                 {% endif %}

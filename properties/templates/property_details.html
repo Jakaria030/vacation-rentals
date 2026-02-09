@@ -8,7 +8,7 @@
         <div class="property-images">
             {% if images %}
             {% for image in images %}
-            <img src="/media/images/{{ image.image }}" alt="Property Image">
+            <img src="/media/{{ image.image }}" alt="Property Image">
             {% endfor %}
             {% else %}
             <img src="/media/image.jpg" alt="Default Image" class="main-image">
