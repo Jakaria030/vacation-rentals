@@ -8,16 +8,12 @@ class Location(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.city}, {self.country}"
+        return f"{self.name}, {self.city}, {self.country}"
 
 
 # Property Model
 class Property(models.Model):
-    location = models.ForeignKey(
-        Location,
-        on_delete=models.CASCADE,
-        related_name="properties"
-    )
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="properties")
     title = models.CharField(max_length=255)
     description = models.TextField()
     price_per_night = models.PositiveIntegerField()
@@ -32,13 +28,9 @@ class Property(models.Model):
 
 # Property Image Model
 class PropertyImage(models.Model):
-    property = models.ForeignKey(
-        Property,
-        on_delete=models.CASCADE,
-        related_name="images"
-    )
-    image_url = models.CharField(max_length=255)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.image_url
+        return self.image.name if self.image else "No image"
