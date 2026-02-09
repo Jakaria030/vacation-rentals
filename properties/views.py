@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Q, Subquery, OuterRef
 from .models import Location, Property, PropertyImage
@@ -49,10 +49,14 @@ def properties_result(request):
         ).values(
             "id", "title", "location__name", "location__city", "location__country", "price_per_night", "likes_count", "reviews_count", "facilities", "image"
         )
-        
+
     return render(request, "properties.html", {"location": location_country, "properties": list(properties)})
 
 
 # Property Details
-def property_details(request):
-    render(request, "property_details.html", {"hello": "Hello"})
+def property_details(request, id):
+    property = get_object_or_404(Property, id=id)
+    
+    images = property.images.all().values()
+
+    return render(request, "property_details.html", { "property": property,"images": images })

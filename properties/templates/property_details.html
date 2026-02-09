@@ -1,5 +1,45 @@
 {% extends "master.html" %}
+{% load custom_filters %}
 
 {% block content %}
-<h2>{{ hello }}</h2>
+<main class="main">
+    <div class="property-details-card">
+        <!-- Left Column: Images -->
+        <div class="property-images">
+            {% if images %}
+            {% for image in images %}
+            <img src="/media/images/{{ image.image }}" alt="Property Image">
+            {% endfor %}
+            {% else %}
+            <img src="/media/image.jpg" alt="Default Image" class="main-image">
+            {% endif %}
+        </div>
+
+        <!-- Right Column: Property Info -->
+        <div class="property-info">
+            <h2>{{ property.title }}</h2>
+            <p>{{ property.description }}</p>
+            <p><strong>Price:</strong> ${{ property.price_per_night }} per night</p>
+            <p>
+                <strong>Likes:</strong> {{ property.likes_count }} |
+                <strong>Reviews:</strong> {{ property.reviews_count }}
+            </p>
+            <p>
+                <strong>Facilities:</strong>
+                {% for fac in property.facilities|split:"," %}
+                <span>{{ fac }}{% if not forloop.last %} &middot;{% endif %}</span>
+                {% endfor %}
+            </p>
+            <p>
+                <strong>Location:</strong>
+                <span>{{ property.location.name }}, {{ property.location.city }}, {{ property.location.country}}</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="back-container">
+        <a href="{% url 'properties:properties_result' %}" class="back-btn">Back to Properties</a>
+    </div>
+</main>
 {% endblock %}
