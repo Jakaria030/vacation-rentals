@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Q, Subquery, OuterRef
 from .models import Location, Property, PropertyImage
@@ -26,7 +26,8 @@ def location_autocomplete(request):
 def properties_result(request):
     q = request.GET.get("location", "").strip()
     location_name = (q.split(",")[0] if "," in q else q).strip()
-    location_country = (q.split(",")[2] if "," in q else q).strip()
+    location_parts = [part.strip() for part in q.split(",")]
+    location_country = location_parts[-1].upper() if location_parts else ""
 
     # Sub query for first image
     image_subquery = PropertyImage.objects.filter(property=OuterRef("pk")).values("image")[:1]
@@ -55,8 +56,10 @@ def properties_result(request):
 
 # Property Details
 def property_details(request, id):
-    property = get_object_or_404(Property, id=id)
-    
-    images = property.images.all().values()
-
-    return render(request, "property_details.html", { "property": property,"images": images })
+    try:
+        property = Property.objects.get(id=id)
+        images = property.images.all().values()
+        return render(request, "property_details.html", { "property": property,"images": images })
+    except Property.DoesNotExist:
+        message = f"Property with ID: {id} not found!"
+        return render(request, "property_details.html", { "message": message})

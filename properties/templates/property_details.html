@@ -3,6 +3,9 @@
 
 {% block content %}
 <main class="main">
+    {% if message %}
+    <p class="no-result">{{ message }}</p>
+    {% else %}
     <div class="property-details-card">
         <!-- Left Column: Images -->
         <div class="property-images">
@@ -36,7 +39,7 @@
             </p>
         </div>
     </div>
-
+    {% endif %}
     <!-- Back Button -->
     <div class="back-container">
         <a href="{% url 'properties:properties_result' %}" class="back-btn">Back to Properties</a>
