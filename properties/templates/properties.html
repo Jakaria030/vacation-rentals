@@ -1,5 +1,51 @@
 {% extends "master.html" %}
+{% load custom_filters %}
 
 {% block content %}
-<h1>Hello</h1>
+<div class="properties-wrapper">
+    <h2 class="page-title">{{ location }} Vacation Rentals</h2>
+
+    <div class="properties-grid">
+        {% for prop in properties %}
+        <div class="property-card">
+
+            <!-- Image section -->
+            <div class="image-wrapper">
+                {% if prop.image %}
+                <img src="/media/images/{{ prop.image }}" alt="{{ prop.title }}">
+                {% else %}
+                <img src="/media/image.jpg" alt="Default Image">
+                {% endif %}
+                <span class="price">${{ prop.price_per_night }}/Night</span>
+            </div>
+
+            <!-- Card body -->
+            <div class="card-body">
+                <h3 class="property-title">{{ prop.title }}</h3>
+
+                <div class="likes-reviews">
+                    ❤️ {{ prop.likes_count }} ({{ prop.reviews_count }} Reveiws)
+                </div>
+
+                <div class="facilities">
+                    {% for fac in prop.facilities|split:"," %}
+                    <span class="facility-item">{{ fac }}{% if not forloop.last %}{{ "  " }}&middot;{% endif %}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="location">
+                    {{ prop.location__name }} &gt; {{ prop.location__city }}
+                </div>
+
+                <a href="{% url 'properties:property_details' prop.id %}" class="details-btn">
+                    View Details
+                </a>
+            </div>
+
+        </div>
+        {% empty %}
+        <p class="no-result">No properties found.</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

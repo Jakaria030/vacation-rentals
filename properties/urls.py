@@ -7,7 +7,8 @@ app_name = "properties"
 urlpatterns = [
     path("", views.index, name="index"),
     path("locations/", views.location_autocomplete, name="location_autocomplete"),
-    path("properties/", views.properties_result, name="properties_result")
+    path("properties/", views.properties_result, name="properties_result"),
+    path("property_details/<int:id>/", views.property_details, name="property_details")
 ]
 
 if settings.DEBUG:

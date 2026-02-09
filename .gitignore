@@ -18,4 +18,4 @@ staticfiles/
 .DS_Store
 
 # media file
-media/
+media/images/
