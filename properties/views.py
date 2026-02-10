@@ -26,8 +26,6 @@ def location_autocomplete(request):
 def properties_result(request):
     q = request.GET.get("location", "").strip()
     location_name = (q.split(",")[0] if "," in q else q).strip()
-    location_parts = [part.strip() for part in q.split(",")]
-    location_country = location_parts[-1].upper() if location_parts else ""
 
     # Sub query for first image
     image_subquery = PropertyImage.objects.filter(property=OuterRef("pk")).values("image")[:1]
@@ -51,7 +49,7 @@ def properties_result(request):
             "id", "title", "location__name", "location__city", "location__country", "price_per_night", "likes_count", "reviews_count", "facilities", "image"
         )
 
-    return render(request, "properties.html", {"location": location_country, "properties": list(properties)})
+    return render(request, "properties.html", {"location": location_name.upper(), "properties": list(properties)})
 
 
 # Property Details
