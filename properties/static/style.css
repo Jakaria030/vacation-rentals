@@ -96,6 +96,7 @@ ul.suggestions li:hover {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 25px;
+    margin-bottom: 30px;
 }
 
 .property-card {
@@ -164,7 +165,8 @@ ul.suggestions li:hover {
     margin-bottom: 12px;
 }
 
-.details-btn {
+.details-btn,
+.pagination-btn {
     display: inline-block;
     padding: 10px 15px;
     background: #007bff;
@@ -174,7 +176,8 @@ ul.suggestions li:hover {
     font-size: 14px;
 }
 
-.details-btn:hover {
+.details-btn:hover,
+.pagination-btn:hover {
     background: #0056b3;
 }
 
@@ -183,6 +186,21 @@ ul.suggestions li:hover {
     text-align: center;
     font-size: 18px;
     color: #666;
+}
+
+/* Pagination container */
+.pagination-wrapper {
+    padding-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination-btn.disabled {
+    background-color: #e0e0e0;
+    color: #999;
+    pointer-events: none;
+    cursor: default;
 }
 
 /* Property details page */

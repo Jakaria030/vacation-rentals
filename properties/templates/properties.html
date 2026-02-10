@@ -11,6 +11,7 @@
         </div>
     </div>
 
+    <!-- Properties grid container -->
     <div class="properties-grid">
         {% for prop in properties %}
         <div class="property-card">
@@ -52,6 +53,23 @@
         {% empty %}
         <p class="no-result">No properties found.</p>
         {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-wrapper">
+        <a class="pagination-btn {% if not page_obj.has_previous %}disabled{% endif %}"
+            href="{% if page_obj.has_previous %}?location={{ location }}&page={{ page_obj.previous_page_number }}{% else %}#{% endif %}">
+            &laquo; Previous
+        </a>
+
+        <span class="pagination-info">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        <a class="pagination-btn {% if not page_obj.has_next %}disabled{% endif %}"
+            href="{% if page_obj.has_next %}?location={{ location }}&page={{ page_obj.next_page_number }}{% else %}#{% endif %}">
+            Next &raquo;
+        </a>
     </div>
 </div>
 {% endblock %}

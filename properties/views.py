@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Q, Subquery, OuterRef
@@ -32,24 +33,35 @@ def properties_result(request):
 
     if location_name:
         # Filter properties by related location (name, city, country)
-        properties = Property.objects.filter(
+        properties_qs = Property.objects.filter(
             Q(location__name__icontains=location_name) |
             Q(location__city__icontains=location_name) |
             Q(location__country__icontains=location_name)
         ).annotate(
             image = Subquery(image_subquery)
-        ).values(
-            "id", "title", "location__name", "location__city", "location__country", "price_per_night", "likes_count", "reviews_count", "facilities", "image"
         )
     else:
         # If no location provided, return all properties
-        properties = Property.objects.all().annotate(
+        properties_qs = Property.objects.all().annotate(
             image = Subquery(image_subquery)
-        ).values(
-            "id", "title", "location__name", "location__city", "location__country", "price_per_night", "likes_count", "reviews_count", "facilities", "image"
         )
+    
+    properties = list(properties_qs.values(
+        "id", "title", "location__name", "location__city", "location__country",
+        "price_per_night", "likes_count", "reviews_count", "facilities", "image"
+    ))
+        
+    paginator = Paginator(properties, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
-    return render(request, "properties.html", {"location": location_name.upper(), "properties": list(properties)})
+    context = {
+        "location": location_name.upper(),
+        "properties": page_obj,
+        "page_obj": page_obj,
+    }
+
+    return render(request, "properties.html", context)
 
 
 # Property Details
