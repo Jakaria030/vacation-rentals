@@ -2,47 +2,87 @@
 {% load custom_filters %}
 
 {% block content %}
-<main class="main">
+<main class="main-property-details">
     {% if message %}
     <p class="no-result">{{ message }}</p>
     {% else %}
-    <div class="property-details-card">
-        <!-- Left Column: Images -->
-        <div class="property-images">
-            {% if images %}
-            {% for image in images %}
-            <img src="/media/{{ image.image }}" alt="Property Image">
-            {% endfor %}
-            {% else %}
-            <img src="/media/image.jpg" alt="Default Image" class="main-image">
-            {% endif %}
-        </div>
+    <section class="property-wrapper">
+        <div class="property-details-card">
 
-        <!-- Right Column: Property Info -->
-        <div class="property-info">
-            <h2>{{ property.title }}</h2>
-            <p>{{ property.description }}</p>
-            <p><strong>Price:</strong> ${{ property.price_per_night }} per night</p>
-            <p>
-                <strong>Likes:</strong> {{ property.likes_count }} |
-                <strong>Reviews:</strong> {{ property.reviews_count }}
-            </p>
-            <p>
-                <strong>Facilities:</strong>
-                {% for fac in property.facilities|split:"," %}
-                <span>{{ fac }}{% if not forloop.last %} &middot;{% endif %}</span>
-                {% endfor %}
-            </p>
-            <p>
-                <strong>Location:</strong>
-                <span>{{ property.location.name }}, {{ property.location.city }}, {{ property.location.country}}</span>
-            </p>
+            <!-- Images -->
+            <div class="property-images">
+                <button class="slider-btn prev">&#10094;</button>
+
+                <div class="slider">
+                    {% if images %}
+                    {% for image in images %}
+                    <img src="/media/{{ image.image }}" class="slide {% if forloop.first %}active{% endif %}"
+                        alt="Property Image">
+                    {% endfor %}
+                    {% else %}
+                    <img src="/media/image.jpg" class="slide active" alt="Default Image">
+                    {% endif %}
+                </div>
+
+                <button class="slider-btn next">&#10095;</button>
+            </div>
+
+
+            <!-- Info -->
+            <div class="property-info">
+                <h1 class="property-title">{{ property.title }}</h1>
+
+                <p class="property-description">
+                    {{ property.description }}
+                </p>
+
+                <div class="property-meta">
+                    <span><strong>Price:</strong> ${{ property.price_per_night }} / night</span>
+                    <span><strong>Likes:</strong> {{ property.likes_count }}</span>
+                    <span><strong>Reviews:</strong> {{ property.reviews_count }}</span>
+                </div>
+
+                <div class="property-section">
+                    <strong>Facilities:</strong>
+                    <div class="facilities">
+                        {% for fac in property.facilities|split:"," %}
+                        <span class="facility">{{ fac }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="property-section">
+                    <strong>Location:</strong>
+                    <p>{{ property.location.name }}, {{ property.location.city }}, {{ property.location.country }}</p>
+                </div>
+            </div>
+
         </div>
-    </div>
+    </section>
     {% endif %}
-    <!-- Back Button -->
-    <div class="back-container">
-        <a href="{% url 'properties:properties_result' %}" class="back-btn">Back to Properties</a>
-    </div>
 </main>
+
+<script>
+    const slides = document.querySelectorAll(".slide");
+    const prevBtn = document.querySelector(".prev");
+    const nextBtn = document.querySelector(".next");
+
+    let current = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove("active"));
+        slides[index].classList.add("active");
+    }
+
+    prevBtn.addEventListener("click", () => {
+        current = (current - 1 + slides.length) % slides.length;
+        showSlide(current);
+    });
+
+    nextBtn.addEventListener("click", () => {
+        current = (current + 1) % slides.length;
+        showSlide(current);
+    });
+</script>
+
 {% endblock %}
