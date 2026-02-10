@@ -25,18 +25,24 @@ def location_autocomplete(request):
 
 # Properties result
 def properties_result(request):
-    q = request.GET.get("location", "").strip()
-    location_name = (q.split(",")[0] if "," in q else q).strip()
+    q = request.GET.get("location", "")
+    location_name = q.lower().strip()
+    keywords = [word for word in location_name.replace(",", " ").split() if word]
+
+    location_filter = Q()
+
+    # Filter properties by related location (name, city, country)
+    for word in keywords:
+        location_filter |= Q(location__name__icontains=word)
+        location_filter |= Q(location__city__icontains=word)
+        location_filter |= Q(location__country__icontains=word)
 
     # Sub query for first image
     image_subquery = PropertyImage.objects.filter(property=OuterRef("pk")).values("image")[:1]
 
     if location_name:
-        # Filter properties by related location (name, city, country)
         properties_qs = Property.objects.filter(
-            Q(location__name__icontains=location_name) |
-            Q(location__city__icontains=location_name) |
-            Q(location__country__icontains=location_name)
+            location_filter
         ).annotate(
             image = Subquery(image_subquery)
         )
