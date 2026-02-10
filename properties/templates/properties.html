@@ -2,14 +2,8 @@
 {% load custom_filters %}
 
 {% block content %}
-<div class="properties-wrapper">
-    <div style="display: flex; justify-content: space-between; gap: 50px">
-        <h2 class="page-title">{{ location }} Vacation Rentals</h2>
-        <!-- Back Button -->
-        <div class="back-container">
-            <a href="{% url 'properties:index' %}" class="back-btn">Back to Home</a>
-        </div>
-    </div>
+<main class="main-properties">
+    <h2 class="page-title">{{ location }} Vacation Rentals</h2>
 
     <!-- Properties grid container -->
     <div class="properties-grid">
@@ -71,5 +65,5 @@
             Next &raquo;
         </a>
     </div>
-</div>
+</main>
 {% endblock %}

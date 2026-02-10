@@ -7,7 +7,7 @@ html {
     background-color: #fff;
 }
 
-/* Navbar container */
+/* Navbar css */
 .nav-container {
     padding: 16px 32px;
     background-color: #fff;
@@ -120,7 +120,7 @@ input[type="text"]:focus {
     background-color: #0056b3;
 }
 
-.search-btn:disabled{
+.search-btn:disabled {
     background-color: #0056b3;
     cursor: not-allowed;
 }
@@ -155,11 +155,10 @@ input[type="text"]:focus {
 }
 
 
-/* Propertie page */
-.properties-wrapper {
+/* Properties page css */
+.main-properties {
     max-width: 1440px;
-    margin: 40px auto;
-    padding: 0 20px;
+    margin: 0 auto;
 }
 
 .page-title {
@@ -325,23 +324,4 @@ input[type="text"]:focus {
 .property-info p {
     font-size: 16px;
     margin-bottom: 10px;
-}
-
-.back-container {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.back-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 25px;
-    font-size: 16px;
-}
-
-.back-btn:hover {
-    background-color: #0056b3;
 }
