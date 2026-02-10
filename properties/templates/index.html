@@ -2,27 +2,34 @@
 
 {% block content %}
 <!-- Search box -->
-<div class="container">
-    <h1>VACATION RENTALS</h1>
+<main class="main-home">
+    <h1 class="title">VACATION RENTALS</h1>
     <div class="search-container">
-        <form method="get" action="{% url 'properties:properties_result' %}">
+        <form class="search-box" method="get" action="{% url 'properties:properties_result' %}">
             <input type="text" id="location-input" name="location" placeholder="Search for a location..."
                 autocomplete="off">
-            <ul class="suggestions" id="suggestions-list"></ul>
-            <button type="submit">Search</button>
+            <button class="search-btn" id="search-btn" disabled="true" type="submit">SEARCH</button>
         </form>
+        <ul class="suggestions" id="suggestions-list"></ul>
     </div>
-</div>
-
+</main>
 
 <!-- Script for calling auto complete api -->
 <script>
     const input = document.getElementById("location-input");
     const suggestionsList = document.getElementById("suggestions-list");
+    const searchBtn = document.getElementById("search-btn");
     let debounceTimer;
 
     input.addEventListener("input", function () {
         const query = this.value.trim();
+
+        if (query.length === 0) {
+            searchBtn.disabled = true;
+        } else {
+            searchBtn.disabled = false
+        }
+
         if (query.length < 3) {
             suggestionsList.style.display = "none";
             return;
